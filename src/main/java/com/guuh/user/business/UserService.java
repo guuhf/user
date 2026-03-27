@@ -3,6 +3,7 @@ package com.guuh.user.business;
 import com.guuh.user.business.converter.UserConverter;
 import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
+import com.guuh.user.infraestructure.exceptions.EmailNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import com.guuh.user.infraestructure.security.SecurityConfig;
@@ -32,4 +33,18 @@ public class UserService {
             throw new UserAlreadyExistsException("Email already registered!");
         }
     }
+
+    public UserDTO findUserDTOByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new EmailNotFoundException("Email not exists!"));
+    }
+
+    public void deleteUserByEmail(String email){
+        if (!userRepository.existsByEmail(email)){
+            throw new EmailNotFoundException("User not exists!");
+        }
+        userRepository.deleteByEmail(email);
+    }
+
+
 }

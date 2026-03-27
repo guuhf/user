@@ -1,5 +1,6 @@
 package com.guuh.user.infraestructure.handler;
 
+import com.guuh.user.infraestructure.exceptions.EmailNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,5 +15,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> userAlreadyExistsHandler(UserAlreadyExistsException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
+    @ExceptionHandler(EmailNotFoundException.class)
+    private ResponseEntity<RestErrorMessage> emailNotFoundHandler(EmailNotFoundException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 }
