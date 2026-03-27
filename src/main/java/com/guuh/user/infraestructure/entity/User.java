@@ -19,7 +19,7 @@ public class User {
     private Long id;
     @Column(name = "name" , length = 100)
     private String name;
-    @Column(name = "email" , length = 100)
+    @Column(name = "email" , length = 100, unique = true)
     private String email;
     @Column(name = "password")
     private String password;

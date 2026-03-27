@@ -47,7 +47,7 @@ public class UserConverter {
         return addresses;
     }
 
-    public Phone toPhones(PhoneDTO phoneDTO){
+    public Phone toPhone(PhoneDTO phoneDTO){
         return Phone.builder()
                 .phoneNumber(phoneDTO.getPhoneNumber())
                 .countryCode(phoneDTO.getCountryCode())
@@ -57,8 +57,58 @@ public class UserConverter {
     public List<Phone> toPhoneList(List<PhoneDTO> phonesDTO){
         List<Phone> phones = new ArrayList<>();
         for (PhoneDTO phoneDTO : phonesDTO){
-            phones.add(toPhones(phoneDTO));
+            phones.add(toPhone(phoneDTO));
         }
         return phones;
+    }
+
+    public UserDTO toUserDTO(User user){
+        return UserDTO.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .addresses(toAddressDTOList(user.getAddresses()))
+                .phones(toPhoneDTOList(user.getPhones()))
+                .build();
+    }
+
+    public AddressDTO toAddressDTO(Address addres){
+        return AddressDTO.builder()
+                .street(addres.getStreet())
+                .number(addres.getNumber())
+                .complement(addres.getComplement())
+                .neighborhood(addres.getNeighborhood())
+                .city(addres.getCity())
+                .state(addres.getState())
+                .zipCode(addres.getZipCode())
+                .country(addres.getCountry())
+
+                .build();
+    }
+
+    public List<AddressDTO> toAddressDTOList(List<Address> addresses) {
+        List<AddressDTO> addressesDTO = new ArrayList<>();
+
+        for (Address address : addresses) {
+            addressesDTO.add(toAddressDTO(address));
+        }
+
+        return addressesDTO;
+    }
+
+
+    public PhoneDTO toPhoneDTO(Phone phone){
+        return PhoneDTO.builder()
+                .phoneNumber(phone.getPhoneNumber())
+                .countryCode(phone.getCountryCode())
+                .build();
+    }
+
+    public List<PhoneDTO> toPhoneDTOList(List<Phone> phones){
+        List<PhoneDTO> phonesDTO = new ArrayList<>();
+        for (Phone phone : phones){
+            phonesDTO.add(toPhoneDTO(phone));
+        }
+        return phonesDTO;
     }
 }
