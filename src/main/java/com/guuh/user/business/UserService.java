@@ -6,6 +6,7 @@ import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,16 +15,18 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserConverter converter;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserDTO saveUser(UserDTO userDTO){
-       User user  = converter.toUser(userDTO);
-       validateEmailUniqueness(user.getEmail());
-       return converter.toUserDTO(userRepository.save(user));
+    public UserDTO saveUser(UserDTO userDTO) {
+        validateEmailUniqueness(userDTO.getEmail());
+        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        User user = converter.toUser(userDTO);
+        return converter.toUserDTO(userRepository.save(user));
     }
 
-    public void validateEmailUniqueness(String email){
+    public void validateEmailUniqueness(String email) {
         boolean emailExists = userRepository.existsByEmail(email);
-        if (emailExists){
+        if (emailExists) {
             throw new UserAlreadyExistsException("Email already registered!");
         }
     }
