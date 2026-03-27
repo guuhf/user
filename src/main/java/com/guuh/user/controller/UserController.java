@@ -3,7 +3,6 @@ package com.guuh.user.controller;
 
 import com.guuh.user.business.UserService;
 import com.guuh.user.business.dtos.UserDTO;
-import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +32,14 @@ public class UserController {
         return "Bearer " + jwtUtil.generateToken(authentication.getName());
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<UserDTO> findUserByEmail(@PathVariable String email){
-        return ResponseEntity.status(200).body(userService.findUserDTOByEmail(email));
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> findUserById(@PathVariable Long id){
+        return ResponseEntity.status(200).body(userService.findUserDTOById(id));
     }
 
-    @DeleteMapping("/{email}")
-    public ResponseEntity<Void> deleteUserByEmail(@PathVariable String email){
-        userService.deleteUserByEmail(email);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
+        userService.deleteUserById(id);
         return ResponseEntity.status(204).build();
     }
 }
