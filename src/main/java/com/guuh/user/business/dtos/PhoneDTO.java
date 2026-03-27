@@ -1,6 +1,5 @@
 package com.guuh.user.business.dtos;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 @Getter
