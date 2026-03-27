@@ -5,7 +5,10 @@ import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
+import com.guuh.user.infraestructure.security.SecurityConfig;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,16 +17,18 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserConverter converter;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserDTO saveUser(UserDTO userDTO){
-       User user  = converter.toUser(userDTO);
-       validateEmailUniqueness(user.getEmail());
-       return converter.toUserDTO(userRepository.save(user));
+    public UserDTO saveUser(UserDTO userDTO) {
+        validateEmailUniqueness(userDTO.getEmail());
+        User user = converter.toUser(userDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return converter.toUserDTO(userRepository.save(user));
     }
 
-    public void validateEmailUniqueness(String email){
+    public void validateEmailUniqueness(String email) {
         boolean emailExists = userRepository.existsByEmail(email);
-        if (emailExists){
+        if (emailExists) {
             throw new UserAlreadyExistsException("Email already registered!");
         }
     }

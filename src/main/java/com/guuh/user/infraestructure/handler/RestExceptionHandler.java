@@ -12,7 +12,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserAlreadyExistsException.class)
     private ResponseEntity<RestErrorMessage> userAlreadyExistsHandler(UserAlreadyExistsException e){
-        RestErrorMessage threatResponde = new RestErrorMessage(HttpStatus.CONFLICT, e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponde);
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
     }
 }
