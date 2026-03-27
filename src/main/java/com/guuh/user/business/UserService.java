@@ -6,9 +6,7 @@ import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.EmailNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
-import com.guuh.user.infraestructure.security.SecurityConfig;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +32,17 @@ public class UserService {
         }
     }
 
-    public UserDTO findUserDTOByEmail(String email){
-        User user = userRepository.findByEmail(email).orElseThrow(()->
-                new EmailNotFoundException("Email not exists"));
+    public UserDTO findUserDTOById(Long id){
+        User user = userRepository.findById(id).orElseThrow(()->
+                new EmailNotFoundException("User not exists"));
         return converter.toUserDTO(user);
     }
 
-    public void deleteUserByEmail(String email){
-        if (!userRepository.existsByEmail(email)){
+    public void deleteUserById(Long id){
+        if (!userRepository.existsById(id)){
             throw new EmailNotFoundException("User not exists!");
         }
-        userRepository.deleteByEmail(email);
+        userRepository.deleteById(id);
     }
 
 

@@ -66,6 +66,7 @@ public class UserConverter {
         return UserDTO.builder()
                 .name(user.getName())
                 .email(user.getEmail())
+                .password(user.getPassword())
                 .addresses(toAddressDTOList(user.getAddresses()))
                 .phones(toPhoneDTOList(user.getPhones()))
                 .build();
