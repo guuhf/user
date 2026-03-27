@@ -1,4 +1,30 @@
 package com.guuh.user.business;
 
+import com.guuh.user.business.converter.UserConverter;
+import com.guuh.user.business.dtos.UserDTO;
+import com.guuh.user.infraestructure.entity.User;
+import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
+import com.guuh.user.infraestructure.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
 public class UserService {
+
+    private final UserRepository userRepository;
+    private final UserConverter converter;
+
+    public User saveUser(UserDTO userDTO){
+       User user  = converter.toUser(userDTO);
+       checkEmail(user.getEmail());
+       return userRepository.save(user);
+    }
+
+    public void checkEmail(String email){
+        boolean emailExists = userRepository.existsByEmail(email);
+        if (emailExists){
+            throw new UserAlreadyExistsException("Usuário já existente!");
+        }
+    }
 }

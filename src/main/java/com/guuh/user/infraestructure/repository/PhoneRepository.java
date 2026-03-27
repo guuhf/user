@@ -1,4 +1,7 @@
 package com.guuh.user.infraestructure.repository;
 
-public class PhoneRepository {
+import com.guuh.user.infraestructure.entity.Phone;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PhoneRepository extends JpaRepository<Phone, Long> {
 }
