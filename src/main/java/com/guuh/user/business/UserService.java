@@ -5,8 +5,10 @@ import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
+import com.guuh.user.infraestructure.security.SecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,12 +17,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserConverter converter;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDTO saveUser(UserDTO userDTO) {
         validateEmailUniqueness(userDTO.getEmail());
         User user = converter.toUser(userDTO);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return converter.toUserDTO(userRepository.save(user));
     }
 
