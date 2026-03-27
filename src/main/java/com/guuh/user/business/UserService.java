@@ -15,16 +15,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserConverter converter;
 
-    public User saveUser(UserDTO userDTO){
+    public UserDTO saveUser(UserDTO userDTO){
        User user  = converter.toUser(userDTO);
-       checkEmail(user.getEmail());
-       return userRepository.save(user);
+       validateEmailUniqueness(user.getEmail());
+       return converter.toUserDTO(userRepository.save(user));
     }
 
-    public void checkEmail(String email){
+    public void validateEmailUniqueness(String email){
         boolean emailExists = userRepository.existsByEmail(email);
         if (emailExists){
-            throw new UserAlreadyExistsException("Usuário já existente!");
+            throw new UserAlreadyExistsException("Email already registered!");
         }
     }
 }
