@@ -19,8 +19,8 @@ public class UserService {
 
     public UserDTO saveUser(UserDTO userDTO) {
         validateEmailUniqueness(userDTO.getEmail());
-        userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         User user = converter.toUser(userDTO);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         return converter.toUserDTO(userRepository.save(user));
     }
 
