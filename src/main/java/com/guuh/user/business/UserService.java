@@ -35,8 +35,9 @@ public class UserService {
     }
 
     public UserDTO findUserDTOByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() ->
-                new EmailNotFoundException("Email not exists!"));
+        User user = userRepository.findByEmail(email).orElseThrow(()->
+                new EmailNotFoundException("Email not exists"));
+        return converter.toUserDTO(user);
     }
 
     public void deleteUserByEmail(String email){
