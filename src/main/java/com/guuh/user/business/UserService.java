@@ -32,17 +32,32 @@ public class UserService {
         }
     }
 
-    public UserDTO findUserDTOById(Long id){
-        User user = userRepository.findById(id).orElseThrow(()->
+    public UserDTO findUserById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User not exists!"));
         return converter.toUserDTO(user);
     }
 
-    public void deleteUserById(Long id){
-        if (!userRepository.existsById(id)){
+    public void deleteUserById(Long id) {
+        if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not exists!");
         }
         userRepository.deleteById(id);
+    }
+
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User userSearched = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("User not exists!"));
+        updatePassword(userDTO, userSearched);
+        User user = converter.userUpdate(userDTO, userSearched);
+        return converter.toUserDTO(userRepository.save(user));
+
+    }
+
+    public void updatePassword(UserDTO userDTO, User user) {
+        if (userDTO.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
     }
 
 
