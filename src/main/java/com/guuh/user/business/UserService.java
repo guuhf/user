@@ -3,7 +3,7 @@ package com.guuh.user.business;
 import com.guuh.user.business.converter.UserConverter;
 import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
-import com.guuh.user.infraestructure.exceptions.EmailNotFoundException;
+import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +34,13 @@ public class UserService {
 
     public UserDTO findUserDTOById(Long id){
         User user = userRepository.findById(id).orElseThrow(()->
-                new EmailNotFoundException("User not exists"));
+                new UserNotFoundException("User not exists!"));
         return converter.toUserDTO(user);
     }
 
     public void deleteUserById(Long id){
         if (!userRepository.existsById(id)){
-            throw new EmailNotFoundException("User not exists!");
+            throw new UserNotFoundException("User not exists!");
         }
         userRepository.deleteById(id);
     }
