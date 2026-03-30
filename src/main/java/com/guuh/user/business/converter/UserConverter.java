@@ -111,4 +111,14 @@ public class UserConverter {
         }
         return phonesDTO;
     }
+
+    public User userUpdate(UserDTO userDTO, User user){
+        if (userDTO.getName() != null){
+            user.setName(userDTO.getName());
+        }
+        if (userDTO.getEmail() != null){
+            user.setEmail(userDTO.getEmail());
+        }
+        return user;
+    }
 }

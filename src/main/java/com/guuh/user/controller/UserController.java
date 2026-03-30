@@ -3,7 +3,9 @@ package com.guuh.user.controller;
 
 import com.guuh.user.business.UserService;
 import com.guuh.user.business.dtos.UserDTO;
+import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.security.JwtUtil;
+import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,12 +36,18 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findUserById(@PathVariable Long id){
-        return ResponseEntity.status(200).body(userService.findUserDTOById(id));
+        return ResponseEntity.status(200).body(userService.findUserById(id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
         userService.deleteUserById(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUserById(@PathVariable Long id,
+                                                  @RequestBody UserDTO userDTO){
+        return ResponseEntity.status(200).body(userService.updateUser(id, userDTO));
     }
 }
