@@ -20,19 +20,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> UserNotFoundHandler(UserNotFoundException e){
+    private ResponseEntity<RestErrorMessage> userNotFoundHandler(UserNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    private ResponseEntity<RestErrorMessage> InvalidCredentialsHandler(BadCredentialsException e){
+    private ResponseEntity<RestErrorMessage> invalidCredentialsHandler(BadCredentialsException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED,"Invalid email or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> InvalidCredentialsHandler(UserNotFoundException e){
+    private ResponseEntity<RestErrorMessage> invalidCredentialsHandler(UserNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED,"Invalid email or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
     }

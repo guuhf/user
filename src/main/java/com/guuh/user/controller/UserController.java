@@ -2,6 +2,8 @@ package com.guuh.user.controller;
 
 
 import com.guuh.user.business.UserService;
+import com.guuh.user.business.dtos.AddressDTO;
+import com.guuh.user.business.dtos.PhoneDTO;
 import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.security.JwtUtil;
@@ -24,6 +26,18 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO){
         return ResponseEntity.status(201).body(userService.saveUser(userDTO));
+    }
+
+    @PostMapping ("/{id}/address")
+    public ResponseEntity<AddressDTO> addAddressToUser(@RequestBody AddressDTO addressDTO,
+                                                       @PathVariable Long id){
+        return ResponseEntity.status(200).body(userService.addAddresToUser(addressDTO, id));
+    }
+
+    @PostMapping("/{id}/phones")
+    public ResponseEntity<PhoneDTO> addPhoneToUser(@RequestBody PhoneDTO phoneDTO,
+                                                   @PathVariable Long id){
+        return ResponseEntity.status(200).body(userService.addPhoneToUser(phoneDTO,id));
     }
 
     @PostMapping("/login")
