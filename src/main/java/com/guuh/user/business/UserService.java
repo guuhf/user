@@ -1,7 +1,11 @@
 package com.guuh.user.business;
 
 import com.guuh.user.business.converter.UserConverter;
+import com.guuh.user.business.dtos.AddressDTO;
+import com.guuh.user.business.dtos.PhoneDTO;
 import com.guuh.user.business.dtos.UserDTO;
+import com.guuh.user.infraestructure.entity.Address;
+import com.guuh.user.infraestructure.entity.Phone;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
@@ -23,6 +27,27 @@ public class UserService {
         User user = converter.toUser(userDTO);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return converter.toUserDTO(userRepository.save(user));
+    }
+
+    public AddressDTO addAddresToUser(AddressDTO addressDTO, Long id) {
+        Address address = converter.toAddress(addressDTO);
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("User not found!"));
+
+        user.getAddresses().add(address);
+        userRepository.save(user);
+        return converter.toAddressDTO(address);
+
+    }
+
+    public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO, Long id) {
+        Phone phone = converter.toPhone(phoneDTO);
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("User not found!"));
+
+        user.getPhones().add(phone);
+        userRepository.save(user);
+        return converter.toPhoneDTO(phone);
     }
 
     public void validateEmailUniqueness(String email) {
