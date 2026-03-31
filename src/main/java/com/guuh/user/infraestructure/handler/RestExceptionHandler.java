@@ -1,5 +1,6 @@
 package com.guuh.user.infraestructure.handler;
 
+import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
 import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> userNotFoundHandler(UserNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    private ResponseEntity<RestErrorMessage> AccessDeniedHandler(AccessDeniedException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.FORBIDDEN, e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(threatResponse);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
