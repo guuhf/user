@@ -7,10 +7,14 @@ import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.Address;
 import com.guuh.user.infraestructure.entity.Phone;
 import com.guuh.user.infraestructure.entity.User;
+import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
 import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
+import com.guuh.user.infraestructure.repository.AddressRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final AddressRepository addressRepository;
     private final UserConverter converter;
     private final PasswordEncoder passwordEncoder;
 
@@ -57,6 +62,22 @@ public class UserService {
         }
     }
 
+    public User getLoggedUser(){
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        return userRepository.findByEmail(email).orElseThrow(() ->
+                new UserNotFoundException("User not found!"));
+        }
+
+    public void validationUserAccess(Long id){
+        User loggedUser = getLoggedUser();
+        if (!loggedUser.getId().equals(id)){
+            throw new AccessDeniedException("You do not have permission to access this resource");
+        }
+    }
+
     public UserDTO findUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User not exists!"));
@@ -84,6 +105,5 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
     }
-
 
 }
