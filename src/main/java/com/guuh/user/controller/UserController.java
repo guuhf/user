@@ -28,16 +28,14 @@ public class UserController {
         return ResponseEntity.status(201).body(userService.saveUser(userDTO));
     }
 
-    @PostMapping ("/{id}/address")
-    public ResponseEntity<AddressDTO> addAddressToUser(@RequestBody AddressDTO addressDTO,
-                                                       @PathVariable Long id){
-        return ResponseEntity.status(200).body(userService.addAddresToUser(addressDTO, id));
+    @PostMapping ("/me/address")
+    public ResponseEntity<AddressDTO> addAddressToUser(@RequestBody AddressDTO addressDTO){
+        return ResponseEntity.status(200).body(userService.addAddresToUser(addressDTO));
     }
 
-    @PostMapping("/{id}/phones")
-    public ResponseEntity<PhoneDTO> addPhoneToUser(@RequestBody PhoneDTO phoneDTO,
-                                                   @PathVariable Long id){
-        return ResponseEntity.status(200).body(userService.addPhoneToUser(phoneDTO,id));
+    @PostMapping("/me/phones")
+    public ResponseEntity<PhoneDTO> addPhoneToUser(@RequestBody PhoneDTO phoneDTO){
+        return ResponseEntity.status(200).body(userService.addPhoneToUser(phoneDTO));
     }
 
     @PostMapping("/login")
@@ -48,20 +46,19 @@ public class UserController {
         return "Bearer " + jwtUtil.generateToken(authentication.getName());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findUserById(@PathVariable Long id){
-        return ResponseEntity.status(200).body(userService.findUserById(id));
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getLoggedUserData(){
+        return ResponseEntity.status(200).body(userService.getLoggedUserData());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id){
-        userService.deleteUserById(id);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUserById(){
+        userService.deleteUserById();
         return ResponseEntity.status(204).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUserById(@PathVariable Long id,
-                                                  @RequestBody UserDTO userDTO){
-        return ResponseEntity.status(200).body(userService.updateUser(id, userDTO));
+    @PutMapping("/me")
+    public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userDTO){
+        return ResponseEntity.status(200).body(userService.updateUser(userDTO));
     }
 }
