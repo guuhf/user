@@ -71,10 +71,10 @@ public class UserService {
                 new UserNotFoundException("User not found!"));
         }
 
-    public void authValidation(Long id){
+    public void validationUserAccess(Long id){
         User loggedUser = getLoggedUser();
         if (!loggedUser.getId().equals(id)){
-            throw new AccessDeniedException("You cannot access this user");
+            throw new AccessDeniedException("You do not have permission to access this resource");
         }
     }
 
