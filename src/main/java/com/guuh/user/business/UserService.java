@@ -35,6 +35,7 @@ public class UserService {
     }
 
     public AddressDTO addAddresToUser(AddressDTO addressDTO, Long id) {
+        validationUserAccess(id);
         Address address = converter.toAddress(addressDTO);
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User not found!"));
@@ -46,6 +47,7 @@ public class UserService {
     }
 
     public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO, Long id) {
+        validationUserAccess(id);
         Phone phone = converter.toPhone(phoneDTO);
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User not found!"));
@@ -85,6 +87,7 @@ public class UserService {
     }
 
     public void deleteUserById(Long id) {
+        validationUserAccess(id);
         if (!userRepository.existsById(id)) {
             throw new UserNotFoundException("User not exists!");
         }
@@ -92,6 +95,7 @@ public class UserService {
     }
 
     public UserDTO updateUser(Long id, UserDTO userDTO) {
+        validationUserAccess(id);
         User userSearched = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("User not exists!"));
         updatePassword(userDTO, userSearched);
