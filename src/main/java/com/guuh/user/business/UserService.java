@@ -8,6 +8,7 @@ import com.guuh.user.infraestructure.entity.Address;
 import com.guuh.user.infraestructure.entity.Phone;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
+import com.guuh.user.infraestructure.exceptions.AddressNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
 import com.guuh.user.infraestructure.repository.AddressRepository;
@@ -34,11 +35,9 @@ public class UserService {
         return converter.toUserDTO(userRepository.save(user));
     }
 
-    public AddressDTO addAddresToUser(AddressDTO addressDTO, Long id) {
-        validationUserAccess(id);
+    public AddressDTO addAddresToUser(AddressDTO addressDTO) {
         Address address = converter.toAddress(addressDTO);
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("User not found!"));
+        User user = getLoggedUser();
 
         user.getAddresses().add(address);
         userRepository.save(user);
@@ -46,11 +45,9 @@ public class UserService {
 
     }
 
-    public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO, Long id) {
-        validationUserAccess(id);
+    public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO) {
         Phone phone = converter.toPhone(phoneDTO);
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("User not found!"));
+        User user = getLoggedUser();
 
         user.getPhones().add(phone);
         userRepository.save(user);
@@ -73,31 +70,18 @@ public class UserService {
                 new UserNotFoundException("User not found!"));
         }
 
-    public void validationUserAccess(Long id){
-        User loggedUser = getLoggedUser();
-        if (!loggedUser.getId().equals(id)){
-            throw new AccessDeniedException("You do not have permission to access this resource");
-        }
-    }
-
-    public UserDTO findUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("User not exists!"));
+    public UserDTO getLoggedUserData() {
+        User user = getLoggedUser();
         return converter.toUserDTO(user);
     }
 
-    public void deleteUserById(Long id) {
-        validationUserAccess(id);
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("User not exists!");
-        }
-        userRepository.deleteById(id);
+    public void deleteUserById() {
+        User user = getLoggedUser();
+        userRepository.delete(user);
     }
 
-    public UserDTO updateUser(Long id, UserDTO userDTO) {
-        validationUserAccess(id);
-        User userSearched = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("User not exists!"));
+    public UserDTO updateUser(UserDTO userDTO) {
+        User userSearched = getLoggedUser();
         updatePassword(userDTO, userSearched);
         User user = converter.userUpdate(userDTO, userSearched);
         return converter.toUserDTO(userRepository.save(user));
