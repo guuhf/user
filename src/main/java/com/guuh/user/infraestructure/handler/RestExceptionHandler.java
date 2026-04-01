@@ -1,8 +1,6 @@
 package com.guuh.user.infraestructure.handler;
 
-import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
-import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
-import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
+import com.guuh.user.infraestructure.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,6 +20,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     private ResponseEntity<RestErrorMessage> userNotFoundHandler(UserNotFoundException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(AddressNotFoundException.class)
+    private ResponseEntity<RestErrorMessage> AddressNotFoundHandler(UserNotFoundException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+    @ExceptionHandler(PhoneNotFoundException.class)
+    private ResponseEntity<RestErrorMessage> PhoneNotFoundHandler(UserNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }

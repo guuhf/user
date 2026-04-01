@@ -7,11 +7,9 @@ import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.Address;
 import com.guuh.user.infraestructure.entity.Phone;
 import com.guuh.user.infraestructure.entity.User;
-import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
-import com.guuh.user.infraestructure.exceptions.AddressNotFoundException;
-import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
-import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
+import com.guuh.user.infraestructure.exceptions.*;
 import com.guuh.user.infraestructure.repository.AddressRepository;
+import com.guuh.user.infraestructure.repository.PhoneRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
@@ -25,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
+    private final PhoneRepository phoneRepository;
     private final UserConverter converter;
     private final PasswordEncoder passwordEncoder;
 
@@ -61,14 +60,14 @@ public class UserService {
         }
     }
 
-    public User getLoggedUser(){
+    public User getLoggedUser() {
         String email = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
         return userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException("User not found!"));
-        }
+    }
 
     public UserDTO getLoggedUserData() {
         User user = getLoggedUser();
@@ -92,6 +91,42 @@ public class UserService {
         if (userDTO.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
+    }
+
+    public AddressDTO updateAddress(AddressDTO addressDTO, Long id) {
+        User user = getLoggedUser();
+        Address addressFound = null;
+        for (Address address : user.getAddresses()) {
+            if (address.getId().equals(id)) {
+                addressFound = address;
+                break;
+            }
+        }
+
+        if (addressFound == null) {
+            throw new AddressNotFoundException("Address not found!");
+        }
+
+        converter.addressUpdate(addressDTO, addressFound);
+
+        return converter.toAddressDTO(addressRepository.save(addressFound));
+    }
+
+    public PhoneDTO updatePhones(PhoneDTO phoneDTO, Long id){
+        User user = getLoggedUser();
+        Phone phoneFound = null;
+        for (Phone phone : user.getPhones()){
+            if (phone.getId().equals(id)){
+                phoneFound = phone;
+                break;
+            }
+        }
+        if (phoneFound == null){
+            throw new PhoneNotFoundException("Phone not found!");
+        }
+
+        converter.updatePhone(phoneDTO, phoneFound);
+        return converter.toPhoneDTO(phoneRepository.save(phoneFound));
     }
 
 }
