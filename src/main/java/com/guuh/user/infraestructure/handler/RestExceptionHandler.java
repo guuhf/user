@@ -25,13 +25,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> AddressNotFoundHandler(UserNotFoundException e){
+    private ResponseEntity<RestErrorMessage> AddressNotFoundHandler(AddressNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 
     @ExceptionHandler(PhoneNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> PhoneNotFoundHandler(UserNotFoundException e){
+    private ResponseEntity<RestErrorMessage> PhoneNotFoundHandler(PhoneNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
