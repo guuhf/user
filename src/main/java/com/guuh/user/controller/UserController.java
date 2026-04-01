@@ -28,16 +28,6 @@ public class UserController {
         return ResponseEntity.status(201).body(userService.saveUser(userDTO));
     }
 
-    @PostMapping ("/me/address")
-    public ResponseEntity<AddressDTO> addAddressToUser(@RequestBody AddressDTO addressDTO){
-        return ResponseEntity.status(200).body(userService.addAddresToUser(addressDTO));
-    }
-
-    @PostMapping("/me/phones")
-    public ResponseEntity<PhoneDTO> addPhoneToUser(@RequestBody PhoneDTO phoneDTO){
-        return ResponseEntity.status(200).body(userService.addPhoneToUser(phoneDTO));
-    }
-
     @PostMapping("/login")
     public String login(@RequestBody UserDTO userDTO){
         Authentication authentication = authenticationManager.authenticate(

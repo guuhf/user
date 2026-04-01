@@ -34,25 +34,6 @@ public class UserService {
         return converter.toUserDTO(userRepository.save(user));
     }
 
-    public AddressDTO addAddresToUser(AddressDTO addressDTO) {
-        Address address = converter.toAddress(addressDTO);
-        User user = getLoggedUser();
-
-        user.getAddresses().add(address);
-        userRepository.save(user);
-        return converter.toAddressDTO(address);
-
-    }
-
-    public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO) {
-        Phone phone = converter.toPhone(phoneDTO);
-        User user = getLoggedUser();
-
-        user.getPhones().add(phone);
-        userRepository.save(user);
-        return converter.toPhoneDTO(phone);
-    }
-
     public void validateEmailUniqueness(String email) {
         boolean emailExists = userRepository.existsByEmail(email);
         if (emailExists) {
@@ -91,42 +72,6 @@ public class UserService {
         if (userDTO.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
-    }
-
-    public AddressDTO updateAddress(AddressDTO addressDTO, Long id) {
-        User user = getLoggedUser();
-        Address addressFound = null;
-        for (Address address : user.getAddresses()) {
-            if (address.getId().equals(id)) {
-                addressFound = address;
-                break;
-            }
-        }
-
-        if (addressFound == null) {
-            throw new AddressNotFoundException("Address not found!");
-        }
-
-        converter.addressUpdate(addressDTO, addressFound);
-
-        return converter.toAddressDTO(addressRepository.save(addressFound));
-    }
-
-    public PhoneDTO updatePhones(PhoneDTO phoneDTO, Long id){
-        User user = getLoggedUser();
-        Phone phoneFound = null;
-        for (Phone phone : user.getPhones()){
-            if (phone.getId().equals(id)){
-                phoneFound = phone;
-                break;
-            }
-        }
-        if (phoneFound == null){
-            throw new PhoneNotFoundException("Phone not found!");
-        }
-
-        converter.updatePhone(phoneDTO, phoneFound);
-        return converter.toPhoneDTO(phoneRepository.save(phoneFound));
     }
 
 }

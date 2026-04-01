@@ -1,0 +1,48 @@
+package com.guuh.user.business;
+
+
+import com.guuh.user.business.converter.PhoneConverter;
+import com.guuh.user.business.dtos.PhoneDTO;
+import com.guuh.user.infraestructure.entity.Phone;
+import com.guuh.user.infraestructure.entity.User;
+import com.guuh.user.infraestructure.exceptions.PhoneNotFoundException;
+import com.guuh.user.infraestructure.repository.PhoneRepository;
+import com.guuh.user.infraestructure.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class PhoneService {
+
+    private final UserRepository userRepository;
+    private final PhoneRepository phoneRepository;
+    private final PhoneConverter converter;
+    private final UserService userService;
+
+    public PhoneDTO addPhoneToUser(PhoneDTO phoneDTO) {
+        Phone phone = converter.toPhone(phoneDTO);
+        User user = userService.getLoggedUser();
+
+        user.getPhones().add(phone);
+        userRepository.save(user);
+        return converter.toPhoneDTO(phone);
+    }
+
+    public PhoneDTO updatePhones(PhoneDTO phoneDTO, Long id){
+        User user = userService.getLoggedUser();
+        Phone phoneFound = null;
+        for (Phone phone : user.getPhones()){
+            if (phone.getId().equals(id)){
+                phoneFound = phone;
+                break;
+            }
+        }
+        if (phoneFound == null){
+            throw new PhoneNotFoundException("Phone not found!");
+        }
+
+        converter.updatePhone(phoneDTO, phoneFound);
+        return converter.toPhoneDTO(phoneRepository.save(phoneFound));
+    }
+}
