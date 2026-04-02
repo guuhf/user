@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public class AddressConverter {
 
-    public Address toAddress(AddressDTO addressDTO){
+    public Address toAddress(AddressDTO addressDTO) {
         return Address.builder()
                 .street(addressDTO.getStreet())
                 .number(addressDTO.getNumber())
@@ -24,16 +24,16 @@ public class AddressConverter {
                 .build();
     }
 
-    public List<Address> toAddressList(List<AddressDTO> addressesDTOS){
-        List <Address> addresses = new ArrayList<>();
-        for (AddressDTO addressDTO : addressesDTOS){
+    public List<Address> toAddressList(List<AddressDTO> addressesDTOS) {
+        List<Address> addresses = new ArrayList<>();
+        for (AddressDTO addressDTO : addressesDTOS) {
             addresses.add(toAddress(addressDTO));
 
         }
         return addresses;
     }
 
-    public AddressDTO toAddressDTO(Address address){
+    public AddressDTO toAddressDTO(Address address) {
         return AddressDTO.builder()
                 .street(address.getStreet())
                 .number(address.getNumber())
@@ -57,7 +57,7 @@ public class AddressConverter {
         return addressesDTO;
     }
 
-    public Address addressUpdate(AddressDTO addressDTO, Address address){
+    public Address addressUpdate(AddressDTO addressDTO, Address address) {
         if (addressDTO.getStreet() != null) {
             address.setStreet(addressDTO.getStreet());
         }
