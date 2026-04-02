@@ -31,18 +31,10 @@ public class PhoneService {
 
     public PhoneDTO updatePhones(PhoneDTO phoneDTO, Long id){
         User user = userService.getLoggedUser();
-        Phone phoneFound = null;
-        for (Phone phone : user.getPhones()){
-            if (phone.getId().equals(id)){
-                phoneFound = phone;
-                break;
-            }
-        }
-        if (phoneFound == null){
-            throw new PhoneNotFoundException("Phone not found!");
-        }
+        Phone phone = phoneRepository.findByIdAndUserId(id, user.getId()).orElseThrow(()->
+                new PhoneNotFoundException("Phone not found!"));
 
-        converter.updatePhone(phoneDTO, phoneFound);
-        return converter.toPhoneDTO(phoneRepository.save(phoneFound));
+        converter.updatePhone(phoneDTO, phone);
+        return converter.toPhoneDTO(phoneRepository.save(phone));
     }
 }
