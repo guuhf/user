@@ -19,4 +19,8 @@ public class Phone {
     @Column(name = "country_code" , length = 3)
     private String countryCode;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
 }

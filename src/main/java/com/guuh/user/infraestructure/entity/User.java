@@ -2,7 +2,6 @@ package com.guuh.user.infraestructure.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 
@@ -23,11 +22,9 @@ public class User{
     private String email;
     @Column(name = "password")
     private String password;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Address> addresses;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Phone> phones;
 
 
