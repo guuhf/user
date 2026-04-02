@@ -3,8 +3,6 @@ package com.guuh.user.infraestructure.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.swing.plaf.nimbus.State;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -32,4 +30,8 @@ public class Address {
     private String zipCode;
     @Column(name = "country", length = 60)
     private String country;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

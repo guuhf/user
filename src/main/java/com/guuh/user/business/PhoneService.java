@@ -24,6 +24,7 @@ public class PhoneService {
         Phone phone = converter.toPhone(phoneDTO);
         User user = userService.getLoggedUser();
 
+        phone.setUser(user);
         user.getPhones().add(phone);
         userRepository.save(user);
         return converter.toPhoneDTO(phone);

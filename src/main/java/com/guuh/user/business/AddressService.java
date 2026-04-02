@@ -23,6 +23,7 @@ public class AddressService {
         Address address = converter.toAddress(addressDTO);
         User user = userService.getLoggedUser();
 
+        address.setUser(user);
         user.getAddresses().add(address);
         userRepository.save(user);
         return converter.toAddressDTO(address);

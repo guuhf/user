@@ -19,17 +19,29 @@ public class UserConverter {
     private final AddressConverter addressConverter;
     private final PhoneConverter phoneConverter;
 
-    public User toUser(UserDTO userDTO){
-        return User.builder()
+    public User toUser(UserDTO userDTO) {
+        User user = User.builder()
                 .name(userDTO.getName())
                 .email(userDTO.getEmail())
                 .password(userDTO.getPassword())
-                .addresses(addressConverter.toAddressList(userDTO.getAddresses()))
-                .phones(phoneConverter.toPhoneList(userDTO.getPhones()))
                 .build();
+
+        List<Address> addresses = addressConverter.toAddressList(userDTO.getAddresses());
+        if (addresses != null) {
+            addresses.forEach(address -> address.setUser(user));
+            user.setAddresses(addresses);
+        }
+
+        List<Phone> phones = phoneConverter.toPhoneList(userDTO.getPhones());
+        if (phones != null){
+            phones.forEach(phone -> phone.setUser(user));
+            user.setPhones(phones);
+        }
+
+        return user;
     }
 
-    public UserDTO toUserDTO(User user){
+    public UserDTO toUserDTO(User user) {
         return UserDTO.builder()
                 .name(user.getName())
                 .email(user.getEmail())
@@ -39,11 +51,11 @@ public class UserConverter {
                 .build();
     }
 
-    public User userUpdate(UserDTO userDTO, User user){
-        if (userDTO.getName() != null){
+    public User userUpdate(UserDTO userDTO, User user) {
+        if (userDTO.getName() != null) {
             user.setName(userDTO.getName());
         }
-        if (userDTO.getEmail() != null){
+        if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail());
         }
         return user;
