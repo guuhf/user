@@ -4,7 +4,6 @@ import com.guuh.user.business.converter.AddressConverter;
 import com.guuh.user.business.dtos.AddressDTO;
 import com.guuh.user.infraestructure.entity.Address;
 import com.guuh.user.infraestructure.entity.User;
-import com.guuh.user.infraestructure.exceptions.AccessDeniedException;
 import com.guuh.user.infraestructure.exceptions.AddressNotFoundException;
 import com.guuh.user.infraestructure.repository.AddressRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
@@ -32,10 +31,24 @@ public class AddressService {
 
     public AddressDTO updateAddress(AddressDTO addressDTO, Long id) {
         User user = userService.getLoggedUser();
-        Address address = addressRepository.findByIdAndUserId(id, user.getId()).orElseThrow(()->
+        Address address = addressRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() ->
                 new AddressNotFoundException("Address not Found!"));
 
         converter.addressUpdate(addressDTO, address);
         return converter.toAddressDTO(addressRepository.save(address));
     }
+
+    public AddressDTO getAddressData(Long id) {
+        User user = userService.getLoggedUser();
+        return converter.toAddressDTO(addressRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() ->
+                new AddressNotFoundException("Address not found!")));
+    }
+
+    public void deleteAddress(Long id) {
+        User user = userService.getLoggedUser();
+        Address address = addressRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() ->
+                new AddressNotFoundException("Address not found"));
+        addressRepository.delete(address);
+    }
 }
+

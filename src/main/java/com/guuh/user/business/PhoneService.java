@@ -9,6 +9,7 @@ import com.guuh.user.infraestructure.exceptions.PhoneNotFoundException;
 import com.guuh.user.infraestructure.repository.PhoneRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,5 +38,18 @@ public class PhoneService {
 
         converter.updatePhone(phoneDTO, phone);
         return converter.toPhoneDTO(phoneRepository.save(phone));
+    }
+
+    public PhoneDTO getPhoneData(Long id) {
+        User user = userService.getLoggedUser();
+        return converter.toPhoneDTO(phoneRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() ->
+                new PhoneNotFoundException("Phone no found!")));
+    }
+
+    public void deletePhone(Long id) {
+        User user = userService.getLoggedUser();
+        Phone phone = phoneRepository.findByIdAndUserId(id, user.getId()).orElseThrow(() ->
+                new PhoneNotFoundException("Phone not found"));
+        phoneRepository.delete(phone);
     }
 }

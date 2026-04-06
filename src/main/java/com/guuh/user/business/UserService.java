@@ -1,18 +1,13 @@
 package com.guuh.user.business;
 
 import com.guuh.user.business.converter.UserConverter;
-import com.guuh.user.business.dtos.AddressDTO;
-import com.guuh.user.business.dtos.PhoneDTO;
 import com.guuh.user.business.dtos.UserDTO;
-import com.guuh.user.infraestructure.entity.Address;
-import com.guuh.user.infraestructure.entity.Phone;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.*;
 import com.guuh.user.infraestructure.repository.AddressRepository;
 import com.guuh.user.infraestructure.repository.PhoneRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +50,7 @@ public class UserService {
         return converter.toUserDTO(user);
     }
 
-    public void deleteUserById() {
+    public void deleteUser() {
         User user = getLoggedUser();
         userRepository.delete(user);
     }

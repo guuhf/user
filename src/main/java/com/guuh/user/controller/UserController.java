@@ -2,12 +2,8 @@ package com.guuh.user.controller;
 
 
 import com.guuh.user.business.UserService;
-import com.guuh.user.business.dtos.AddressDTO;
-import com.guuh.user.business.dtos.PhoneDTO;
 import com.guuh.user.business.dtos.UserDTO;
-import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.security.JwtUtil;
-import jakarta.persistence.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,12 +20,12 @@ public class UserController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.status(201).body(userService.saveUser(userDTO));
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UserDTO userDTO){
+    public String login(@RequestBody UserDTO userDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword())
         );
@@ -37,18 +33,18 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> getLoggedUserData(){
+    public ResponseEntity<UserDTO> getLoggedUserData() {
         return ResponseEntity.status(200).body(userService.getLoggedUserData());
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUserById(){
-        userService.deleteUserById();
+    public ResponseEntity<Void> deleteUserById() {
+        userService.deleteUser();
         return ResponseEntity.status(204).build();
     }
 
     @PutMapping("/me")
-    public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userDTO) {
         return ResponseEntity.status(200).body(userService.updateUser(userDTO));
     }
 }

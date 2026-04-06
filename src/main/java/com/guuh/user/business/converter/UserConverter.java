@@ -33,7 +33,7 @@ public class UserConverter {
         }
 
         List<Phone> phones = phoneConverter.toPhoneList(userDTO.getPhones());
-        if (phones != null){
+        if (phones != null) {
             phones.forEach(phone -> phone.setUser(user));
             user.setPhones(phones);
         }
