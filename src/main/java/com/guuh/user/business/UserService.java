@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
-    private final PhoneRepository phoneRepository;
     private final UserConverter converter;
     private final PasswordEncoder passwordEncoder;
 
