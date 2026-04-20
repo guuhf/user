@@ -43,14 +43,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    private ResponseEntity<RestErrorMessage> invalidCredentialsHandler(BadCredentialsException e){
+    private ResponseEntity<RestErrorMessage> InvalidCredentialsHandler(BadCredentialsException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED,"Invalid email or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    private ResponseEntity<RestErrorMessage> invalidCredentialsHandler(UserNotFoundException e){
+    private ResponseEntity<RestErrorMessage> UsernameNotFoundHandler(UsernameNotFoundException e){
         RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.UNAUTHORIZED,"Invalid email or password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(threatResponse);
+    }
+
+    @ExceptionHandler(DuplicateUserPhoneException.class)
+    private ResponseEntity<RestErrorMessage> DuplicateUserPhoneHanlder(DuplicateUserPhoneException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT,e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
+    @ExceptionHandler(DuplicateUserAddressException.class)
+    private ResponseEntity<RestErrorMessage> DuplicateUserAddressHandler(DuplicateUserAddressException e){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT,e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
     }
 }
