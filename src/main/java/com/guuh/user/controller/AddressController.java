@@ -14,7 +14,7 @@ public class AddressController {
 
     @PostMapping()
     public ResponseEntity<AddressDTO> addAddressToUser(@RequestBody AddressDTO addressDTO) {
-        return ResponseEntity.status(201).body(addressService.addAddresToUser(addressDTO));
+        return ResponseEntity.status(201).body(addressService.addAddressToUser(addressDTO));
     }
 
     @PutMapping("/{id}")

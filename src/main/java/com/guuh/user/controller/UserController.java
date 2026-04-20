@@ -38,13 +38,13 @@ public class UserController {
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteUserById() {
+    public ResponseEntity<Void> deleteUser() {
         userService.deleteUser();
         return ResponseEntity.status(204).build();
     }
 
     @PutMapping("/me")
-    public ResponseEntity<UserDTO> updateUserById(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.status(200).body(userService.updateUser(userDTO));
     }
 }

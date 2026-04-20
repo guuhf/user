@@ -3,7 +3,8 @@ package com.guuh.user.business;
 import com.guuh.user.business.converter.UserConverter;
 import com.guuh.user.business.dtos.UserDTO;
 import com.guuh.user.infraestructure.entity.User;
-import com.guuh.user.infraestructure.exceptions.*;
+import com.guuh.user.infraestructure.exceptions.UserAlreadyExistsException;
+import com.guuh.user.infraestructure.exceptions.UserNotFoundException;
 import com.guuh.user.infraestructure.repository.AddressRepository;
 import com.guuh.user.infraestructure.repository.PhoneRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
@@ -17,8 +18,6 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
-    private final PhoneRepository phoneRepository;
     private final UserConverter converter;
     private final PasswordEncoder passwordEncoder;
 

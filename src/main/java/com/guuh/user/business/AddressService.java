@@ -5,6 +5,7 @@ import com.guuh.user.business.dtos.AddressDTO;
 import com.guuh.user.infraestructure.entity.Address;
 import com.guuh.user.infraestructure.entity.User;
 import com.guuh.user.infraestructure.exceptions.AddressNotFoundException;
+import com.guuh.user.infraestructure.exceptions.DuplicateUserAddressException;
 import com.guuh.user.infraestructure.repository.AddressRepository;
 import com.guuh.user.infraestructure.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,15 +19,21 @@ public class AddressService {
     private final UserService userService;
     private final AddressConverter converter;
 
-    public AddressDTO addAddresToUser(AddressDTO addressDTO) {
+    public AddressDTO addAddressToUser(AddressDTO addressDTO) {
         Address address = converter.toAddress(addressDTO);
         User user = userService.getLoggedUser();
 
+        validateAddressUniqueness(address);
         address.setUser(user);
         user.getAddresses().add(address);
         userRepository.save(user);
         return converter.toAddressDTO(address);
+    }
 
+    public void validateAddressUniqueness(Address address){
+        if (addressRepository.existsByAddress(address)){
+            throw new DuplicateUserAddressException("Address already exists for this user!");
+        }
     }
 
     public AddressDTO updateAddress(AddressDTO addressDTO, Long id) {
