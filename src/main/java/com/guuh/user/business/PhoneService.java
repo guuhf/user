@@ -25,17 +25,10 @@ public class PhoneService {
         Phone phone = converter.toPhone(phoneDTO);
         User user = userService.getLoggedUser();
 
-        validatePhoneUniqueness(phone);
         phone.setUser(user);
         user.getPhones().add(phone);
         userRepository.save(user);
         return converter.toPhoneDTO(phone);
-    }
-
-    public void validatePhoneUniqueness(Phone phone){
-        if (phoneRepository.existsByPhone(phone)){
-            throw new DuplicateUserPhoneException("Phone number already exists for this user!");
-        }
     }
 
     public PhoneDTO updatePhones(PhoneDTO phoneDTO, Long id){

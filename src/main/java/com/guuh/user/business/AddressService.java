@@ -23,17 +23,10 @@ public class AddressService {
         Address address = converter.toAddress(addressDTO);
         User user = userService.getLoggedUser();
 
-        validateAddressUniqueness(address);
         address.setUser(user);
         user.getAddresses().add(address);
         userRepository.save(user);
         return converter.toAddressDTO(address);
-    }
-
-    public void validateAddressUniqueness(Address address){
-        if (addressRepository.existsByAddress(address)){
-            throw new DuplicateUserAddressException("Address already exists for this user!");
-        }
     }
 
     public AddressDTO updateAddress(AddressDTO addressDTO, Long id) {
