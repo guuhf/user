@@ -25,6 +25,10 @@ public class AddressConverter {
     }
 
     public List<Address> toAddressList(List<AddressDTO> addressesDTOS) {
+        if (addressesDTOS == null){
+            return null;
+        }
+
         List<Address> addresses = new ArrayList<>();
         for (AddressDTO addressDTO : addressesDTOS) {
             addresses.add(toAddress(addressDTO));
@@ -48,6 +52,10 @@ public class AddressConverter {
     }
 
     public List<AddressDTO> toAddressDTOList(List<Address> addresses) {
+        if (addresses == null){
+            return null;
+        }
+
         List<AddressDTO> addressesDTO = new ArrayList<>();
 
         for (Address address : addresses) {

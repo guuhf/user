@@ -17,6 +17,10 @@ public class PhoneConverter {
     }
 
     public List<Phone> toPhoneList(List<PhoneDTO> phonesDTO){
+        if (phonesDTO == null){
+            return null;
+        }
+
         List<Phone> phones = new ArrayList<>();
         for (PhoneDTO phoneDTO : phonesDTO){
             phones.add(toPhone(phoneDTO));
@@ -32,6 +36,10 @@ public class PhoneConverter {
     }
 
     public List<PhoneDTO> toPhoneDTOList(List<Phone> phones){
+        if (phones == null){
+            return null;
+        }
+
         List<PhoneDTO> phonesDTO = new ArrayList<>();
         for (Phone phone : phones){
             phonesDTO.add(toPhoneDTO(phone));
